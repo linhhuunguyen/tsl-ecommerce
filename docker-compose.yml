@@ -35,6 +35,7 @@ services:
 volumes:
   db:
 
+
 networks:
   tsl-ecommerce-networks:
     driver: bridge

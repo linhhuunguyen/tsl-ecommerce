@@ -1,4 +1,3 @@
-import argon2d from "argon2";
 import { Request, Response } from "express";
 import { User } from "../entities/User";
 
@@ -14,9 +13,9 @@ export const register = async (req: Request, res: Response) => {
     });
   }
 
-  const hashedPassword = await argon2d.hash(password);
+  // const hashedPassword = await argon2d.hash(password);
 
-  const user = User.create({ username, password: hashedPassword, role });
+  const user = User.create({ username, password, role });
 
   await user.save();
   res.status(201).json(user);
