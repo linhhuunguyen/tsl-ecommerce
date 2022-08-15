@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  backend-main:
+    build: ./backend
+    restart: always
+    container_name: tsl-ec-be
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/usr/local/apps/myapp/dev
+      - db:/backend/usr/local/myapp/dev/node_modules/
+    networks:
+      - tsl-ecommerce-networks
+
+  mysqldb:
+    image: mysql:8.0
+    container_name: tsl-ec-db
+    ports:
+      - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=tsl-ec-db
+    volumes:
+      - ./db/my.cnf:/etc/mysql/conf.d/custom.cnf
+      - ./db/data:/var/lib/mysql
+      - db:/db/data/var/lib/mysql
+    networks:
+      - tsl-ecommerce-networks
+
+volumes:
+  db:
+
+networks:
+  tsl-ecommerce-networks:
+    driver: bridge
