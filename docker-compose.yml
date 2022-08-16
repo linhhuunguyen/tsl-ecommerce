@@ -11,7 +11,8 @@ services:
       - ./backend/.env
     volumes:
       - ./backend:/usr/local/apps/myapp/dev
-      - db:/backend/usr/local/myapp/dev/node_modules/
+      - ./backend:/usr/local/apps/myapp/dev/node_modules
+      - db:/backend/usr/local/myapp/dev/node_modules
     networks:
       - tsl-ecommerce-networks
 

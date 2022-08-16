@@ -1,3 +1,4 @@
+import argon2d from "argon2";
 import { Request, Response } from "express";
 import { User } from "../entities/User";
 
@@ -13,10 +14,39 @@ export const register = async (req: Request, res: Response) => {
     });
   }
 
-  // const hashedPassword = await argon2d.hash(password);
+  const hashedPassword = await argon2d.hash(password);
 
-  const user = User.create({ username, password, role });
+  const user = User.create({ username, password: hashedPassword, role });
 
   await user.save();
   res.status(201).json(user);
+};
+
+export const login = async (req: Request, res: Response) => {
+  const { username, password } = req.body;
+
+  const existingUser = await User.findOneBy({ username });
+
+  if (!existingUser) {
+    res.status(400).json({
+      status: "error",
+      msg: "User not found",
+    });
+  } else {
+    const isPasswordValid = await argon2d.verify(
+      existingUser.password,
+      password
+    );
+
+    if (!isPasswordValid) {
+      res.status(400).json({
+        message: "Incorrect password",
+      });
+    }
+  }
+
+  res.status(200).json({
+    message: "Logged in successfully",
+    user: existingUser,
+  });
 };

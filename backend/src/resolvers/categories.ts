@@ -7,8 +7,6 @@ export const createCategory = async (req: Request, res: Response) => {
 
   const newCategory = Category.create({ name });
 
-  console.log("parent", newCategory);
-
   if (parent) {
     const existingParent: Category | null = await Category.findOneBy({
       id: Number(parent),
@@ -24,7 +22,7 @@ export const createCategory = async (req: Request, res: Response) => {
   }
 
   await newCategory.save();
-  
+
   res.status(200).json({
     status: "success",
     Category: newCategory,
