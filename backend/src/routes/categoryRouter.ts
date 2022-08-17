@@ -1,4 +1,5 @@
 import express from "express";
+import { isAuthenticatedUser } from "../middlewares/checkAuth";
 import {
   allCategory,
   createCategory,
@@ -8,7 +9,7 @@ import {
 
 const router = express.Router();
 
-router.get("/categories", allCategory);
+router.get("/categories", isAuthenticatedUser, allCategory);
 
 router.get("/category/:categoryId", detailCategory);
 

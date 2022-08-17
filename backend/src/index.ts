@@ -9,9 +9,7 @@ import { Category } from "./entities/Category";
 import { Cart } from "./entities/Cart";
 import { User } from "./entities/User";
 import { Order } from "./entities/Order";
-import productRoute from "./routes/productRoute";
-import categoryRoute from "./routes/categoryRouter";
-import userRoute from "./routes/userRouter";
+import router from "./routes";
 
 dotenv.config();
 
@@ -38,9 +36,7 @@ const main = async () => {
     res.send("Hello 9999999");
   });
 
-  app.use("/api/v1", productRoute);
-  app.use("/api/v1", categoryRoute);
-  app.use("/api/v1", userRoute);
+  app.use("/api/v1", router);
 
   app.listen(PORT, () => {
     console.log("liiiiii55fffffffff555");
