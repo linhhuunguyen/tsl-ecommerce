@@ -6,35 +6,39 @@ dotenv.config();
 
 export const isAuthenticatedUser = async (
   req: Request<any>,
-  _res: Response,
+  res: Response,
   next: NextFunction
 ) => {
-  // const { token } = req.cookies;
-
   const authHeader = req.header("Authorization");
   const accessToken = authHeader && authHeader.split(" ")[1];
 
-  console.log("token", accessToken);
-
   if (!accessToken) {
-    return next(console.log("Please Login :))))"));
+    return next(
+      res.status(400).json({
+        status: "error",
+        msg: "Please login :V",
+      })
+    );
   }
 
   try {
     const decoData = verify(
       accessToken,
       process.env.ACCESS_TOKEN_SECRET as Secret
-    );
+    ) as any;
 
-    console.log("decoData", decoData);
-
-    const user = await User.findOneBy({ id: Number(decoData) });
+    const user = await User.findOneBy({ id: Number(decoData.userId) });
 
     if (!user) {
-      return next(console.log("khoong co user nhes :V"));
+      return next(
+        res.status(400).json({
+          status: "error",
+          msg: "Not user",
+        })
+      );
+    } else {
+      next();
     }
-
-    next();
   } catch (error) {
     console.log(error);
   }
