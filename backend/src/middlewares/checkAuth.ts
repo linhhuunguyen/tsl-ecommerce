@@ -4,8 +4,12 @@ import dotenv from "dotenv";
 import { User } from "../entities/User";
 dotenv.config();
 
+export interface IGetUserAuthInfoRequest extends Request {
+  user: User;
+}
+
 export const isAuthenticatedUser = async (
-  req: Request<any>,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
