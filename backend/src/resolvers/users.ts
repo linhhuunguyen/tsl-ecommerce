@@ -1,6 +1,6 @@
 import argon2d from "argon2";
 import { Request, Response } from "express";
-import { createToken, sendRefreshToken } from "../utils/auth";
+import { createToken } from "../utils/auth";
 import { User } from "../entities/User";
 
 export const register = async (req: Request, res: Response) => {
@@ -45,19 +45,20 @@ export const login = async (req: Request, res: Response) => {
       });
     }
 
-    sendRefreshToken(res, existingUser);
+    // sendRefreshToken(res, existingUser);
 
     res
-      .status(200)
       .cookie("Authorization", createToken("accessToken", existingUser), {
         httpOnly: true,
       })
-      .json({
-        message: "Logged in successfully",
-        user: existingUser,
-        accessToken: createToken("accessToken", existingUser),
+      .cookie("refresh_token", createToken("refreshToken", existingUser), {
+        httpOnly: true,
       });
+
+    res.status(200).json({
+      message: "Logged in successfully",
+      user: existingUser,
+      accessToken: createToken("accessToken", existingUser),
+    });
   }
 };
-
-

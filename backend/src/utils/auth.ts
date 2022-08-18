@@ -9,7 +9,7 @@ export const createToken = (type: "accessToken" | "refreshToken", user: User) =>
       ? (process.env.ACCESS_TOKEN_SECRET as Secret)
       : (process.env.REFRESH_TOKEN_SECRET as Secret),
     {
-      expiresIn: type === "accessToken" ? "15s" : "60s",
+      expiresIn: type === "accessToken" ? "30s" : "60s",
     }
   );
 
@@ -21,7 +21,7 @@ export const sendRefreshToken = (res: Response, user: User) => {
       httpOnly: true,
       secure: true,
       sameSite: "lax",
-      path: "/api/v1/refresh_token",
+      path: "/refresh_token",
     }
   );
 };

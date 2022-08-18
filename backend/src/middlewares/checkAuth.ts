@@ -11,7 +11,7 @@ export interface IGetUserAuthInfoRequest extends Request {
 export const isAuthenticatedUser = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const authHeader = req.header("Authorization");
   const accessToken = authHeader && authHeader.split(" ")[1];
@@ -41,6 +41,10 @@ export const isAuthenticatedUser = async (
         })
       );
     } else {
+
+      //@ts-ignore 
+      req.user = user
+
       next();
     }
   } catch (error) {
